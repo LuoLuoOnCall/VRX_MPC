@@ -1,8 +1,0 @@
-prefix=/home/wubin/vrx_ws/src/usv_demo/devel
-
-Name: usv_nav
-Description: Description of usv_nav
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

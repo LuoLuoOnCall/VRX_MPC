@@ -1,2 +1,0 @@
-usv_cmd_vel:usv_nav:usv_pub_odom:usv_world_model
--DCATKIN_DEVEL_PREFIX=/home/wubin/vrx_ws/src/usv_demo/devel -DCMAKE_INSTALL_PREFIX=/home/wubin/vrx_ws/src/usv_demo/install -G Unix Makefiles
