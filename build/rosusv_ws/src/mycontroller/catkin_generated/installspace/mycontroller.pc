@@ -1,0 +1,8 @@
+prefix=/home/wubin/vrx_ws/install
+
+Name: mycontroller
+Description: Description of mycontroller
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: roscpp std_msgs

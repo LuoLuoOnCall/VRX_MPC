@@ -1,0 +1,8 @@
+prefix=/home/wubin/vrx_ws/install
+
+Name: multiple_vessels
+Description: Description of multiple_vessels
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

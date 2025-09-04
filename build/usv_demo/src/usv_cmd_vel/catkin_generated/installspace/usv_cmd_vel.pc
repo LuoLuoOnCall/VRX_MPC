@@ -1,0 +1,8 @@
+prefix=/home/wubin/vrx_ws/install
+
+Name: usv_cmd_vel
+Description: Description of usv_cmd_vel
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

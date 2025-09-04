@@ -1,0 +1,8 @@
+prefix=/home/wubin/vrx_ws/devel
+
+Name: multiple_vessels
+Description: Description of multiple_vessels
+Version: 0.0.0
+Cflags: -I/home/wubin/vrx_ws/src/vrx/multiple_vessels/include
+Libs: -L${prefix}/lib -lmultiple_vessels
+Requires: roscpp rospy std_msgs sensor_msgs multivessel_msgs rospack roslib
