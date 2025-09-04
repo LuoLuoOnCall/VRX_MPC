@@ -180,9 +180,12 @@ class Vessel_Controller_PurePursuit(threading.Thread):
                                 K = 2*math.sin(alpha)/self.look_ahead_distance #curvature
                                 v = self.linear_velocity
                                 w = self.linear_velocity * K
+                                
+                                #self.right_cmd_vel = v
+                                #self.left_cmd_vel = v
 
-                                self.right_cmd_vel = v
-                                self.left_cmd_vel = v
+                                self.right_cmd_vel = 250#the plugin of thruster have been modified to output thrust diretly for adapting the MPC controller.from LuoLuoOnCall
+                                self.left_cmd_vel = 250
                                 self.right_cmd_angle = -1*w
                                 self.left_cmd_angle = -1*w 
                                 #You might wonder why we multiply this angular velocity value with -1
