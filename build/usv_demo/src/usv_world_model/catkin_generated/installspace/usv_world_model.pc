@@ -1,8 +1,0 @@
-prefix=/home/wubin/vrx_ws/install
-
-Name: usv_world_model
-Description: Description of usv_world_model
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

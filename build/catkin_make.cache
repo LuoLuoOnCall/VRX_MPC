@@ -1,2 +1,0 @@
-vrx/cora_description:vrx/multiple_vessels:vrx/usv_gazebo_plugins:vrx/usv_msgs:vrx/vorc_gazebo:vrx/vrx_2019:vrx/vrx_gazebo:vrx/wamv_description:vrx/wamv_gazebo:vrx/wave_gazebo:vrx/wave_gazebo_plugins
--DCATKIN_DEVEL_PREFIX=/home/wubin/vrx_ws/devel -DCMAKE_INSTALL_PREFIX=/home/wubin/vrx_ws/install -G Unix Makefiles
