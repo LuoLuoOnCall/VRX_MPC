@@ -19,7 +19,7 @@ add_custom_target(multivessel_msgs_generate_messages ALL)
 
 get_filename_component(_filename "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg" NAME_WE)
 add_custom_target(_multivessel_msgs_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "multivessel_msgs" "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg" "geometry_msgs/Quaternion:std_msgs/String:geometry_msgs/Point:multivessel_msgs/VesselDetails"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "multivessel_msgs" "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg" "multivessel_msgs/VesselDetails:geometry_msgs/Point:std_msgs/String:geometry_msgs/Quaternion"
 )
 
 get_filename_component(_filename "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg" NAME_WE)
@@ -29,7 +29,7 @@ add_custom_target(_multivessel_msgs_generate_messages_check_deps_${_filename}
 
 get_filename_component(_filename "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/Perception.msg" NAME_WE)
 add_custom_target(_multivessel_msgs_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "multivessel_msgs" "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/Perception.msg" "geometry_msgs/Point:std_msgs/String:std_msgs/Header:multivessel_msgs/VesselPose:geometry_msgs/Quaternion:multivessel_msgs/VesselDetails"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "multivessel_msgs" "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/Perception.msg" "std_msgs/Header:std_msgs/String:multivessel_msgs/VesselPose:multivessel_msgs/VesselDetails:geometry_msgs/Point:geometry_msgs/Quaternion"
 )
 
 #
@@ -41,7 +41,7 @@ add_custom_target(_multivessel_msgs_generate_messages_check_deps_${_filename}
 _generate_msg_cpp(multivessel_msgs
   "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg"
+  "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/multivessel_msgs
 )
 _generate_msg_cpp(multivessel_msgs
@@ -53,7 +53,7 @@ _generate_msg_cpp(multivessel_msgs
 _generate_msg_cpp(multivessel_msgs
   "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/Perception.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/multivessel_msgs
 )
 
@@ -90,7 +90,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS multivessel_msgs_generate_messages_
 _generate_msg_eus(multivessel_msgs
   "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg"
+  "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/multivessel_msgs
 )
 _generate_msg_eus(multivessel_msgs
@@ -102,7 +102,7 @@ _generate_msg_eus(multivessel_msgs
 _generate_msg_eus(multivessel_msgs
   "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/Perception.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/multivessel_msgs
 )
 
@@ -139,7 +139,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS multivessel_msgs_generate_messages_
 _generate_msg_lisp(multivessel_msgs
   "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg"
+  "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/multivessel_msgs
 )
 _generate_msg_lisp(multivessel_msgs
@@ -151,7 +151,7 @@ _generate_msg_lisp(multivessel_msgs
 _generate_msg_lisp(multivessel_msgs
   "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/Perception.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/multivessel_msgs
 )
 
@@ -188,7 +188,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS multivessel_msgs_generate_messages_
 _generate_msg_nodejs(multivessel_msgs
   "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg"
+  "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/multivessel_msgs
 )
 _generate_msg_nodejs(multivessel_msgs
@@ -200,7 +200,7 @@ _generate_msg_nodejs(multivessel_msgs
 _generate_msg_nodejs(multivessel_msgs
   "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/Perception.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/multivessel_msgs
 )
 
@@ -237,7 +237,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS multivessel_msgs_generate_messages_
 _generate_msg_py(multivessel_msgs
   "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg"
+  "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/multivessel_msgs
 )
 _generate_msg_py(multivessel_msgs
@@ -249,7 +249,7 @@ _generate_msg_py(multivessel_msgs
 _generate_msg_py(multivessel_msgs
   "/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/Perception.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/String.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselPose.msg;/home/wubin/vrx_ws/src/vrx/multiple_vessels/multivessel_msgs/msg/VesselDetails.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/multivessel_msgs
 )
 

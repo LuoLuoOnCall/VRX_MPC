@@ -1,0 +1,37 @@
+# 编译输出目录
+build/
+devel/
+
+# Python虚拟环境
+.venv/
+venv/
+
+# Catkin工具文件
+.catkin_tools/
+.catkin_workspace
+
+# VS Code配置
+.vscode/
+
+# Python编译文件
+*.pyc
+__pycache__/
+
+# 日志文件
+*.log
+
+# ROS消息和服务生成的文件
+*/msg/_*
+*/srv/_*
+*/msg/*.py
+*/srv/*.py
+!*/msg/*.msg
+!*/srv/*.srv
+
+# Gazebo缓存文件
+*.log
+*.pcd
+
+# 系统文件
+.DS_Store
+Thumbs.db

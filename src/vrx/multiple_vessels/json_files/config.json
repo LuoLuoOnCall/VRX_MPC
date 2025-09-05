@@ -1,6 +1,6 @@
 {
     "simulation":[{
-        "number_of_vessels":4,
+        "number_of_vessels":3,
         "number_of_user_defined_vessels":1,
         "available_sensors":[
             {
