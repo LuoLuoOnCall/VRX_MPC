@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
         vessel_controllers.push_back(std::make_unique<VesselControllerMPC>(i + 1));
     }
     */
-   vessel_controllers.push_back(std::make_unique<VesselControllerMPC>(5));
+   vessel_controllers.push_back(std::make_unique<VesselControllerMPC>(4));
     // Start all controllers
     for (auto& controller : vessel_controllers) {
         controller->start();

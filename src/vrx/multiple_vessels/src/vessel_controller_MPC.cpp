@@ -98,8 +98,6 @@ VesselControllerMPC::VesselControllerMPC(int vesselID) :
     
     ROS_INFO("%d vessel controller started", vessel_id_);
 
-    //设定期望最终位置与控制量
-    Eigen::Matrix<float,6,1> desired_states;
 }
 
 VesselControllerMPC::~VesselControllerMPC() {
