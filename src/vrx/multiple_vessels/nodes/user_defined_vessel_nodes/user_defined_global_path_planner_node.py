@@ -71,5 +71,5 @@ if __name__ == '__main__':
     user_defined_vessel_count = int(rospy.get_param("/user_defined_vessel_count")) 
     vesselID_of_udv =  vessel_count+1
 
-    for i in range(user_defined_vessel_count+1):
-        Vessel_Global_Path_Planner(i+1)
+    
+    Vessel_Global_Path_Planner(vessel_count)

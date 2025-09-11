@@ -57,7 +57,7 @@ class UDV_Perception(threading.Thread):
         self.path = "~/vrx_ws/src/vrx/multiple_vessels"
         self.full_path = os.path.expanduser(self.path)
         
-        with open(self.full_path+'/json_files/config_user_defined.json','r') as f:    
+        with open(self.full_path+'/json_files/config_user_defined_vessels.json','r') as f:    
             self.config_data = json.load(f)
         
         self.hz = 10
