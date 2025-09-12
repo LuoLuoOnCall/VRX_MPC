@@ -144,7 +144,7 @@ void StationKeepingNMPC::set_my_nmpc_solver_for_StationKeeping()
     m_Q(2,2) = 0;
     m_Q(3,3) = 20;
     m_Q(4,4) = 20;
-    m_Q(5,5) = 50;
+    m_Q(5,5) = 20;
     m_R(0,0) = 0.05;
     m_R(1,1) = 0.005;
     

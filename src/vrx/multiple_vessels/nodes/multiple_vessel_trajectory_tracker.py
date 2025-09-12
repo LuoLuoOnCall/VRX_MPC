@@ -269,7 +269,7 @@ class Trajectory_Tracker(threading.Thread):
         msg_to_be_published.data = [self.current_waypointLat,self.current_waypointLon,self.vessel_is_on_global_path,self.desired_yaw]#the order looks strange,because i dont want to change the former order.
         self.pub_current_waypoint.publish(msg_to_be_published)
         
-    def get_local_coord(self):
+    def get_local_coord_to_caul_desired_yaw(self):
         #Converts the position information in Lat-Lon to XY.
         WORLD_POLAR_M = 6356752.3142
         WORLD_EQUATORIAL_M = 6378137.0
@@ -313,13 +313,13 @@ class Trajectory_Tracker(threading.Thread):
         #The psi value is the angle between the current waypoint and the next waypoint.
         if(self.vessel_is_on_global_path == Path_Mode.GLOBAL.value and self.Last_Reached_Global_WpRosParam <= (len(self.global_trajectory)/5) - 2):
            
-            x,y = self.get_local_coord()
+            x,y = self.get_local_coord_to_caul_desired_yaw()
         
             self.desired_yaw = math.atan2(y, x)
         
         elif(self.vessel_is_on_global_path == Path_Mode.LOCAL.value and self.last_reached_local_wp_index <=(len(self.localPath)/2)-2):#if reached to the final waypoint, we don't update the desired yaw.because there is no next waypoint.
             
-            x,y = self.get_local_coord()
+            x,y = self.get_local_coord_to_caul_desired_yaw()
         
             self.desired_yaw = math.atan2(y, x)
         

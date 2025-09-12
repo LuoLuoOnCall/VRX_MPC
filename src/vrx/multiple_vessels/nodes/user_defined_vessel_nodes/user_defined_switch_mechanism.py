@@ -136,6 +136,11 @@ class Switch_Mechanism_And_Trajectory_Tracker(threading.Thread):
         self.current_waypointLat = 0
         self.current_waypointLon=0
 
+        self.next_waypointLat = 0
+        self.next_waypointLon=0
+
+        self.desired_yaw = 0
+
         self.last_reached_local_wp_index = 0
 
         self.reached_to_final_global_wp = False
@@ -542,30 +547,41 @@ class Switch_Mechanism_And_Trajectory_Tracker(threading.Thread):
         #Assign the current global waypoint to a variable.
         #END OF THE ITERATION.
 
-        self.localPath = []#In every iteration I want to make this. Because if we have switched to global path, there is no need to store the local path anymore.
+        self.localPath = []#In every iteration we reset the localPath. Because if we have switched to global path, there is no need to store the local path anymore.
 
         self.Last_Reached_Global_WpRosParam = rospy.get_param("/vessel"+str(self.vesselID)+"_Last_Reached_Global_Wp")
+        self.Next_Global_WpRosParam = self.Last_Reached_Global_WpRosParam +1
 
         if self.Last_Reached_Global_WpRosParam <= (len(self.global_trajectory)/5) - 1: 
-
             WaypointLat = self.global_trajectory[5*(self.Last_Reached_Global_WpRosParam)]
             WaypointLon = self.global_trajectory[(5*(self.Last_Reached_Global_WpRosParam))+1]
+            if self.Last_Reached_Global_WpRosParam <= (len(self.global_trajectory)/5) - 2:
+                next_WaypointLat = self.global_trajectory[5*(self.Next_Global_WpRosParam)]
+                next_WaypointLon = self.global_trajectory[(5*(self.Next_Global_WpRosParam))+1]
+
             self.waypoint = (WaypointLat,WaypointLon)
             self.current_position = (self.current_lat,self.current_lon)
 
             distance_in_between = distance.distance(self.waypoint, self.current_position).meters
             
             if distance_in_between < self.global_wp_reaching_treshold_meters:
-                self.Last_Reached_Global_WpRosParam +=1#jump to the next waypoint.
+                
+                self.Last_Reached_Global_WpRosParam +=1#jump to the next waypoint.It is int because we are using it as an index.
+                self.Next_Global_WpRosParam = self.Last_Reached_Global_WpRosParam +1
+
                 rospy.set_param('vessel'+str(self.vesselID)+"_Last_Reached_Global_Wp", self.Last_Reached_Global_WpRosParam)
+                
+
                 print('vessel'+str(self.vesselID)+"_Last_Reached_Global_Wp: ",self.Last_Reached_Global_WpRosParam)
             else:
                 self.current_waypointLat = WaypointLat
-                self.current_waypointLon = WaypointLon
+                self.current_waypointLon = WaypointLon#I need to caulculate current_desired_psi
+                self.next_waypointLat = next_WaypointLat
+                self.next_waypointLon = next_WaypointLon
         else:
             print("vessel"+str(self.vesselID)+"reached to the final waypoint.")
             self.reached_to_final_global_wp = True
-            
+
     def Find_Current_Local_Wp(self):
         #if local_path_minus_one != local_path:
         #   fresh start to a new local path.
@@ -589,11 +605,16 @@ class Switch_Mechanism_And_Trajectory_Tracker(threading.Thread):
                 print("fresh start to a new local path. Vessel"+str(self.vesselID))
                 self.localPath_minus_one = self.localPath 
                 self.last_reached_local_wp_index = 0
+                self.next_local_wp_index = self.last_reached_local_wp_index + 1
             else:
                 if self.last_reached_local_wp_index <=(len(self.localPath)/2)-1: 
-
+                    #local wp is not changed.
                     waypointLat = self.localPath[2*(self.last_reached_local_wp_index)]
                     waypointLon = self.localPath[(2*(self.last_reached_local_wp_index))+1]
+                    
+                    if self.last_reached_local_wp_index <=(len(self.localPath)/2)-2:
+                        next_WaypointLat = self.localPath[2*(self.next_local_wp_index)]
+                        next_WaypointLon = self.localPath[(2*(self.next_local_wp_index))+1]
 
                     self.waypoint = (waypointLat,waypointLon)
                     self.current_position = (self.current_lat,self.current_lon)
@@ -601,20 +622,23 @@ class Switch_Mechanism_And_Trajectory_Tracker(threading.Thread):
                     distance_in_between = distance.distance(self.waypoint, self.current_position).meters
 
                     if distance_in_between < self.local_wp_reaching_treshold_meters:
-                        self.last_reached_local_wp_index +=1#jump to the next waypoint.
+                        self.last_reached_local_wp_index +=1
+                        self.next_local_wp_index = self.last_reached_local_wp_index +1
                     else:
                         self.current_waypointLat = waypointLat
                         self.current_waypointLon = waypointLon
+                        self.next_waypointLat = next_WaypointLat
+                        self.next_waypointLon = next_WaypointLon
                 else:
-                    print("vessel"+str(self.vesselID)+"reached to the local goal waypoint.")               
+                    print("vessel"+str(self.vesselID)+"reached to the local goal waypoint.")
 
     def Publish_Current_Waypoint(self):
         #In this function, we publish the current waypoint for the controller to make the vessel reach.
         #With the lat-lon information, we also include the state of the /vesselX/is_on_global_path
         #Because in the controller, we might run the robot in different speeds for tracking the local and global paths.
+        self.caulc_current_desired_yaw()
         msg_to_be_published = Float64MultiArray()
-        msg_to_be_published.data = [self.current_waypointLat,self.current_waypointLon,self.vessel_is_on_global_path]
-
+        msg_to_be_published.data = [self.current_waypointLat,self.current_waypointLon,self.vessel_is_on_global_path,self.desired_yaw]#the order looks strange,because i dont want to change the former order.
         self.pub_current_waypoint.publish(msg_to_be_published)
 
     def CallbackLocalPath(self,local_path_msg_):
@@ -633,7 +657,43 @@ class Switch_Mechanism_And_Trajectory_Tracker(threading.Thread):
         self.quaternion_y = imu_msg.orientation.y
         self.quaternion_z = imu_msg.orientation.z
         self.quaternion_w = imu_msg.orientation.w
+    def get_local_coord_to_caul_desired_yaw(self):
+        #Converts the position information in Lat-Lon to XY.
+        WORLD_POLAR_M = 6356752.3142
+        WORLD_EQUATORIAL_M = 6378137.0
 
+        eccentricity = math.acos(WORLD_POLAR_M/WORLD_EQUATORIAL_M)        
+        n_prime = 1/(math.sqrt(1 - math.pow(math.sin(math.radians(float(self.next_waypointLat))),2.0)*math.pow(math.sin(eccentricity), 2.0)))        
+        m = WORLD_EQUATORIAL_M * math.pow(math.cos(eccentricity), 2.0) * math.pow(n_prime, 3.0)        
+        n = WORLD_EQUATORIAL_M * n_prime
+
+        diffLon = float(self.next_waypointLon) - float(self.current_waypointLon)
+        diffLat = float(self.next_waypointLat) - float(self.current_waypointLat)
+
+        surfdistLon = math.pi /180.0 * math.cos(math.radians(float(self.next_waypointLat))) * n
+        surfdistLat = math.pi/180.00 * m
+
+        x = diffLon * surfdistLon
+        y = diffLat * surfdistLat
+
+        return x,y
+    
+    def caulc_current_desired_yaw(self):
+        #The desired state of MPC controller need the psi value of the vessel. 
+        #This function calculates the psi value of the vessel based on the current waypoint and the next waypoint.
+        #The psi value is the angle between the current waypoint and the next waypoint.
+        if(self.vessel_is_on_global_path == Path_Mode.GLOBAL.value and self.Last_Reached_Global_WpRosParam <= (len(self.global_trajectory)/5) - 2):
+           
+            x,y = self.get_local_coord_to_caul_desired_yaw()
+        
+            self.desired_yaw = math.atan2(y, x)
+        
+        elif(self.vessel_is_on_global_path == Path_Mode.LOCAL.value and self.last_reached_local_wp_index <=(len(self.localPath)/2)-2):#if reached to the final waypoint, we don't update the desired yaw.because there is no next waypoint.
+            
+            x,y = self.get_local_coord_to_caul_desired_yaw()
+        
+            self.desired_yaw = math.atan2(y, x)
+        
 if __name__ == '__main__':
     rospy.init_node('multi_vessel_local_path_planner', anonymous=True)
     hz = 10

@@ -75,24 +75,25 @@ VesselControllerMPC::VesselControllerMPC(int vesselID) :
     nh_.getParam(vessel_details_param_txt,vessel_details_);*/
 
     // Subscribe to GPS and IMU sensors
-    std::string sub_topic_gps_txt = "vessel" + std::to_string(vessel_id_) + "/vessel" + std::to_string(vessel_id_) + "/sensors/gps/gps/fix";
+    //std::string sub_topic_gps_txt = "vessel" + std::to_string(vessel_id_) + "/vessel" + std::to_string(vessel_id_) + "/sensors/gps/gps/fix";
+    std::string sub_topic_gps_txt = "/vessel4/vessel4/sensors/gps/gps/fix";
     sub_gps_ = nh_.subscribe(sub_topic_gps_txt, 10, &VesselControllerMPC::callbackGps, this);
     
-    std::string sub_topic_imu_txt = "vessel" + std::to_string(vessel_id_) + "/vessel" + std::to_string(vessel_id_) + "/sensors/imu/imu/data";
+    std::string sub_topic_imu_txt = "/vessel" + std::to_string(vessel_id_) + "/vessel" + std::to_string(vessel_id_) + "/sensors/imu/imu/data";
     sub_imu_ = nh_.subscribe(sub_topic_imu_txt, 10, &VesselControllerMPC::callbackImu, this);
 
-    std::string sub_topic_local_velocity_txt = "vessel" + std::to_string(vessel_id_) + "/vessel" + std::to_string(vessel_id_) + "/sensors/gps/local_velocity";
+    std::string sub_topic_local_velocity_txt = "/vessel" + std::to_string(vessel_id_) + "/vessel" + std::to_string(vessel_id_) + "/sensors/gps/local_velocity";
     sub_local_velocity_ = nh_.subscribe(sub_topic_local_velocity_txt, 10, &VesselControllerMPC::callbackLocalVelocity, this);
 
     // Subscribe to the current_waypoint topic
-    std::string sub_current_waypoint_txt = "vessel" + std::to_string(vessel_id_) + "/current_waypoint";
+    std::string sub_current_waypoint_txt = "/vessel" + std::to_string(vessel_id_) + "/current_waypoint";
     sub_current_waypoint_ = nh_.subscribe(sub_current_waypoint_txt, 10, &VesselControllerMPC::callbackCurrentWaypoint, this);
 
     // Initialize the actuator publishers
-    std::string pub_topic_leftThrustcmd_txt = "vessel" + std::to_string(vessel_id_) + "/thrusters/left_thrust_cmd";
+    std::string pub_topic_leftThrustcmd_txt = "/vessel" + std::to_string(vessel_id_) + "/thrusters/left_thrust_cmd";
     pub_left_thrust_cmd_ = nh_.advertise<std_msgs::Float32>(pub_topic_leftThrustcmd_txt, 10);
     
-    std::string pub_topic_rightThrustcmd_txt = "vessel" + std::to_string(vessel_id_) + "/thrusters/right_thrust_cmd";
+    std::string pub_topic_rightThrustcmd_txt = "/vessel" + std::to_string(vessel_id_) + "/thrusters/right_thrust_cmd";
     pub_right_thrust_cmd_ = nh_.advertise<std_msgs::Float32>(pub_topic_rightThrustcmd_txt, 10);
 
     
@@ -131,22 +132,28 @@ void VesselControllerMPC::run() {
                     
                     if (current_waypoint_ != current_waypoint_minus_one_) {
                         // Waypoint has been changed
-                        ROS_INFO("For Vessel %d, fresh start to reach the current waypoint: [%f, %f, %f]", 
-                                 vessel_id_, current_waypoint_[0], current_waypoint_[1], current_waypoint_[2]);
                         current_waypoint_minus_one_ = current_waypoint_;
                         origin_lat_ = current_lat_;//current_lat_ is reported from GPS callback
                         origin_lon_ = current_lon_;//origin_lon_ and lat is used to calculate the local coordinates
+                        current_waypoint_lat_ = current_waypoint_[0];
+                        current_waypoint_lon_ = current_waypoint_[1];
                         auto local_coords = getLocalCoord(current_waypoint_lat_, current_waypoint_lon_);
                         desired_x_ = local_coords.first;
                         desired_y_ = local_coords.second;
                         desired_yaw_ = current_waypoint_[3];
                         desired_states_ << 0.0, 0.0, 0.0, desired_x_, desired_y_, desired_yaw_;
+                        
                     } else {
                         // Waypoint is not changed. Keep navigating to the waypoint.
                         current_waypoint_lat_ = current_waypoint_[0];
                         current_waypoint_lon_ = current_waypoint_[1];
                         is_on_global_path_ = static_cast<int>(current_waypoint_[2]);
-
+                        ROS_INFO("Desired states: [%f, %f, %f, %f, %f, %f]", 
+                                 desired_states_(0), desired_states_(1), desired_states_(2), 
+                                 desired_states_(3), desired_states_(4), desired_states_(5));
+                        ROS_INFO("CURRENT_STATES:[%f, %f, %f, %f, %f, %f]", 
+                                 current_states_(0), current_states_(1), current_states_(2), 
+                                 current_states_(3), current_states_(4), current_states_(5));
                         // Calculate distance
                         // Note: We're simplifying the distance calculation here
                         double dlat = current_waypoint_lat_ - current_lat_;
@@ -203,12 +210,14 @@ void VesselControllerMPC::run() {
                         }
                     }
                 } else {
-                    ROS_WARN("No waypoints are published yet. Did you start the switch mechanism, local path planner and path tracker ROS nodes?");
+                    ROS_WARN("No waypoints are published yet for vessel %d. Did you start the switch mechanism, local path planner and path tracker ROS nodes?", vessel_id_);
+                    ROS_DEBUG("Vessel %d current_lat_: %f, current_lon_: %f", vessel_id_, current_lat_, current_lon_);
                     rate_.sleep();
                 }
             } else {
-                ROS_WARN("No GPS information. Is the VRX simulation environment started?");
+                ROS_WARN("No GPS information for vessel %d. Is the VRX simulation environment started?", vessel_id_);
                 ROS_WARN("Or is the vessel_count ROS parameter is set wrong? So is this ROS node is trying to subscribe to a GPS that doesn't exist?");
+                ROS_INFO("quaternion_x_: %f", quaternion_x_);
                 rate_.sleep();
             }
         } catch (const std::exception& e) {
